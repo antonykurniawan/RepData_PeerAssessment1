@@ -1,17 +1,42 @@
----
-title: "Reproducible Research: Peer Assessment 1"
-output: 
-  html_document:
-    keep_md: true
----
+# Reproducible Research: Peer Assessment 1
 ## Loading and preprocessing the data
-```{r include=TRUE}
+
+```r
 require(dplyr)
+```
+
+```
+## Loading required package: dplyr
+```
+
+```
+## 
+## Attaching package: 'dplyr'
+```
+
+```
+## The following objects are masked from 'package:stats':
+## 
+##     filter, lag
+```
+
+```
+## The following objects are masked from 'package:base':
+## 
+##     intersect, setdiff, setequal, union
+```
+
+```r
 require(ggplot2)
 ```
 
+```
+## Loading required package: ggplot2
+```
+
 ## Loading and preprocessing the data
-```{r echo=TRUE}
+
+```r
 # Read input file
 activity <- read.csv("activity.csv")
 
@@ -28,42 +53,72 @@ intervalActivity <- activity %>%
   group_by(interval) %>%
   filter(!is.na(steps)) %>%
   summarise(average = mean(steps))
-
 ```
 
 ## What is mean total number of steps taken per day?
-```{r echo=TRUE}
+
+```r
 ggplot(data = dailyActivity, aes(x=total)) +
   geom_histogram(bins = 5, fill="skyblue", color="white") +
   labs(title=" total number of steps taken per day", xlab = "Steps", ylab = "Frequency")
+```
 
+![](PA1_template_files/figure-html/unnamed-chunk-3-1.png)
+
+```r
 print(paste("mean: ", mean(dailyActivity$total, na.rm = TRUE)))
+```
+
+```
+## [1] "mean:  10766.1886792453"
+```
+
+```r
 print(paste("Median: ", median(dailyActivity$total, na.rm = TRUE)))
 ```
 
+```
+## [1] "Median:  10765"
+```
+
 ## What is the average daily activity pattern?
-```{r echo=TRUE}
+
+```r
 ggplot(data=intervalActivity, aes(x=interval, y=average)) +
   geom_line(na.rm=TRUE) + 
   labs(title="Average daily activity pattern") +
   xlab("Interval") +
   ylab("Average Steps")
+```
 
+![](PA1_template_files/figure-html/unnamed-chunk-4-1.png)
+
+```r
 print(paste("interval with maximum number of steps :", 
       intervalActivity %>% filter(average==max(average)) %>% select(interval)))
+```
+
+```
+## [1] "interval with maximum number of steps : 835"
 ```
 
 ## Imputing missing values
 
 total number of missing value in each column
-```{r echo=TRUE}
+
+```r
 colSums(is.na(activity))
+```
+
+```
+##    steps     date interval 
+##     2304        0        0
 ```
 
 
 Fill NA with mean n-1 and n+1
-```{r echo=TRUE}
 
+```r
 cleanActivity <- activity
 naidx <- is.na(cleanActivity$steps)
 intervalidx <- cleanActivity[naidx, "interval"]
@@ -80,14 +135,29 @@ ggplot(data = dailyActivity, aes(x=total)) +
   labs(title=" total number of steps taken per day") +
   xlab("Steps") + 
   ylab("Frequency")
+```
 
+![](PA1_template_files/figure-html/unnamed-chunk-6-1.png)
+
+```r
 print(paste("mean: ", mean(dailyActivity$total)))
-print(paste("Median: ", median(dailyActivity$total)))
+```
 
+```
+## [1] "mean:  10749.7704918033"
+```
+
+```r
+print(paste("Median: ", median(dailyActivity$total)))
+```
+
+```
+## [1] "Median:  10641"
 ```
 
 ## Are there differences in activity patterns between weekdays and weekends?
-```{r echo=TRUE}
+
+```r
 weekend <- weekdays(strptime(cleanActivity$date, format = "%Y-%m-%d")) %in% c("Saturday","Sunday")
 cleanActivity[weekend,"weekInd"] <- "weekend"
 cleanActivity[!weekend,"weekInd"] <- "weekday"
@@ -104,6 +174,7 @@ ggplot(data=intervalActivity, aes(x=interval, y=average)) +
   labs(title="Average daily activity pattern") + 
   xlab("Interval") +
   ylab("Average Steps")
-
 ```
+
+![](PA1_template_files/figure-html/unnamed-chunk-7-1.png)
 
