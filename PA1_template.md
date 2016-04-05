@@ -102,6 +102,14 @@ print(paste("interval with maximum number of steps :",
 ## [1] "interval with maximum number of steps : 835"
 ```
 
+```r
+print(paste("maximum number of steps :", max(intervalActivity$average)))
+```
+
+```
+## [1] "maximum number of steps : 206.169811320755"
+```
+
 ## Imputing missing values
 
 total number of missing value in each column
@@ -116,7 +124,7 @@ colSums(is.na(activity))
 ```
 
 
-Fill NA with mean n-1 and n+1
+Fill NA with the average activity within the same interval
 
 ```r
 cleanActivity <- activity
@@ -178,3 +186,4 @@ ggplot(data=intervalActivity, aes(x=interval, y=average)) +
 
 ![](PA1_template_files/figure-html/unnamed-chunk-7-1.png)
 
+During weekday, activity pattern show earlier activity in the morning. However, during weekend the person are more active through out the day

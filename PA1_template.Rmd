@@ -51,6 +51,7 @@ ggplot(data=intervalActivity, aes(x=interval, y=average)) +
 
 print(paste("interval with maximum number of steps :", 
       intervalActivity %>% filter(average==max(average)) %>% select(interval)))
+print(paste("maximum number of steps :", max(intervalActivity$average)))
 ```
 
 ## Imputing missing values
@@ -61,7 +62,7 @@ colSums(is.na(activity))
 ```
 
 
-Fill NA with mean n-1 and n+1
+Fill NA with the average activity within the same interval
 ```{r echo=TRUE}
 
 cleanActivity <- activity
@@ -107,3 +108,4 @@ ggplot(data=intervalActivity, aes(x=interval, y=average)) +
 
 ```
 
+During weekday, activity pattern show earlier activity in the morning. However, during weekend the person are more active through out the day
